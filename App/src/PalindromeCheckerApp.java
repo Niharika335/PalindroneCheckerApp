@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Stack;
 
 public class PalindromeCheckerApp {
@@ -5,27 +7,32 @@ public class PalindromeCheckerApp {
         // Hardcoded string
         String input = "racecar";
 
-        // Create a Stack to store characters
+        // Initialize structures
+        Queue<Character> queue = new LinkedList<>(); // Queue uses LinkedList in Java
         Stack<Character> stack = new Stack<>();
 
-        // Step 1: Push all characters of the string into the stack
+        // Fill both structures
         for (int i = 0; i < input.length(); i++) {
-            stack.push(input.charAt(i));
+            char c = input.charAt(i);
+            queue.add(c);  // Enqueue (FIFO)
+            stack.push(c); // Push (LIFO)
         }
 
-        String reversed = "";
+        boolean isPalindrome = true;
 
-        // Step 2: Pop characters from the stack to build the reversed string
-        while (!stack.isEmpty()) {
-            reversed += stack.pop();
+        // Compare Dequeue (Front) with Pop (Top)
+        while (!queue.isEmpty()) {
+            char fromQueue = queue.remove(); // Dequeue returns first char added
+            char fromStack = stack.pop();    // Pop returns last char added
+
+            if (fromQueue != fromStack) {
+                isPalindrome = false;
+                break;
+            }
         }
 
-        // Step 3: Compare original with reversed string
-        boolean isPalindrome = input.equals(reversed);
-
-        // Result Output
-        System.out.println("Original String: " + input);
-        System.out.println("Reversed String: " + reversed);
+        // Display Result
+        System.out.println("String: " + input);
         System.out.println("Is Palindrome: " + isPalindrome);
     }
 }
