@@ -1,30 +1,29 @@
-public class PalindromeCheckerApp {
+public class PalindromeChecker {
     public static void main(String[] args) {
-        // Hardcoded string
-        String input = "kayak";
-
-        // Initial call to the recursive method
-        boolean result = isPalindrome(input, 0, input.length() - 1);
-
-        System.out.println("String: " + input);
-        System.out.println("Is Palindrome: " + result);
+        String input = "A man, a plan, a canal: Panama";
+        boolean result = isPalindrome(input);
+        System.out.println("Is it a palindrome? " + result);
     }
 
-    /**
-     * Recursive method to check palindrome
-     */
-    public static boolean isPalindrome(String s, int start, int end) {
-        // Base Condition 1: If pointers meet or cross, it's a palindrome
-        if (start >= end) {
-            return true;
+    public static boolean isPalindrome(String str) {
+        if (str == null) return false;
+
+        // Step 1: Normalize (Lowercase + Remove non-alphanumeric)
+        // [^a-zA-Z0-9] matches anything NOT a letter or number
+        String cleanStr = str.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+
+        // Step 2: Apply Two-Pointer Logic
+        int left = 0;
+        int right = cleanStr.length() - 1;
+
+        while (left < right) {
+            if (cleanStr.charAt(left) != cleanStr.charAt(right)) {
+                return false; // Mismatch found
+            }
+            left++;
+            right--;
         }
 
-        // Base Condition 2: If characters don't match, it's NOT a palindrome
-        if (s.charAt(start) != s.charAt(end)) {
-            return false;
-        }
-
-        // Recursive Step: Check the inner substring by moving pointers inward
-        return isPalindrome(s, start + 1, end - 1);
+        return true; // All characters matched
     }
 }
