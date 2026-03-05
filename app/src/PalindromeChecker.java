@@ -1,71 +1,52 @@
 import java.util.Scanner;
-import java.util.Stack;
 
-/**
- * ==========================================================
- * MAIN CLASS - UseCase12PalindromeCheckerApp
- * ==========================================================
- */
 public class PalindromeChecker {
-
     public static void main(String[] args) {
-
         Scanner scanner = new Scanner(System.in);
 
-        System.out.print("Enter a word: ");
+        System.out.print("Enter a word to check: ");
         String input = scanner.nextLine();
 
-        // Inject Stack strategy
-        PalindromeStrategy strategy = new StackStrategy();
+        System.out.println("\n--- UC13: Performance Results ---");
 
-        boolean result = strategy.check(input);
+        // --- Method 1: StringBuilder Reversal ---
+        long start1 = System.nanoTime();
+        boolean isPal1 = isPalindromeReversal(input);
+        long end1 = System.nanoTime();
+        long time1 = end1 - start1;
 
-        System.out.println(result);
+        // --- Method 2: Two-Pointer Approach ---
+        long start2 = System.nanoTime();
+        boolean isPal2 = isPalindromeTwoPointer(input);
+        long end2 = System.nanoTime();
+        long time2 = end2 - start2;
+
+        // Display Validation Result
+        System.out.println("Is Palindrome? : " + isPal1);
+
+        // Display Execution Times
+        System.out.println("Execution Time (Reversal):    " + time1 + " ns");
+        System.out.println("Execution Time (Two-Pointer): " + time2 + " ns");
 
         scanner.close();
     }
-}
 
-/**
- * ==========================================================
- * INTERFACE - PalindromeStrategy
- * ==========================================================
- */
-interface PalindromeStrategy {
+    // Algorithm A: Reversal (Uses more memory)
+    public static boolean isPalindromeReversal(String s) {
+        String cleaned = s.toLowerCase();
+        String reversed = new StringBuilder(cleaned).reverse().toString();
+        return cleaned.equals(reversed);
+    }
 
-    boolean check(String input);
-}
-
-/**
- * ==========================================================
- * CLASS - StackStrategy
- * ==========================================================
- */
-class StackStrategy implements PalindromeStrategy {
-
-    /**
-     * Implements palindrome validation using Stack.
-     *
-     * @param input string to validate
-     * @return true if palindrome, false otherwise
-     */
-    public boolean check(String input) {
-
-        // Create a stack to store characters
-        Stack<Character> stack = new Stack<>();
-
-        // Push characters of input string onto stack
-        for (char c : input.toCharArray()) {
-            stack.push(c);
-        }
-
-        // Compare characters by popping from stack
-        for (char c : input.toCharArray()) {
-            if (c != stack.pop()) {
+    // Algorithm B: Two-Pointer (More efficient)
+    public static boolean isPalindromeTwoPointer(String s) {
+        String cleaned = s.toLowerCase();
+        int left = 0, right = cleaned.length() - 1;
+        while (left < right) {
+            if (cleaned.charAt(left++) != cleaned.charAt(right--)) {
                 return false;
             }
         }
-
         return true;
     }
 }
